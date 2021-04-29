@@ -10,21 +10,21 @@ user_inputs = st.beta_container()
 with header:
     header.title("Remote Radiologist")
 
-# with description:
-#     description.subheader("Project Description")
-#     description.text("Write the Project Description Here!!!")
 
 with user_inputs:
-    user_col, display_col = st.beta_columns(spec=2)
-    uploaded_file = st.file_uploader("Upload Image", type=['png', 'jpg', 'pdf', 'jpeg'])
-
+    user_display, output_display = user_inputs.beta_columns(2)
+    pat_name = user_display.text_input("Name of the Patient")
+    pat_age = user_display.number_input("Age of the Patient", 5, 90)
+    pat_weight = user_display.number_input("Weight in KGs", 30, 150)
+    pat_gender = user_display.selectbox('Gender', ('Male', 'Female', 'Others'))
+    uploaded_file = output_display.file_uploader("Upload Image", type=['png', 'jpg', 'jpeg'])
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
-        st.image(image, caption='Uploaded Image.', use_column_width=True)
+        output_display.image(image, caption='Uploaded Image.', use_column_width=True)
         # labels = {'Covid%': 35, 'XYZ': 35, 'ABC': 30}
         labels = {}
         # call the predictor here
         for key, value in labels.items():
-            st.write(key + " : " + str(value))
+            output_display.write(key + " : " + str(value))
 
 
