@@ -1,5 +1,8 @@
 import streamlit as st
 from PIL import Image
+
+st.set_page_config(page_title="Remote Radiologist", layout="wide", initial_sidebar_state="expanded")
+
 header = st.beta_container()
 
 description = st.beta_container()
