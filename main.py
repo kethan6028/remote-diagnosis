@@ -1,5 +1,6 @@
 import streamlit as st
 from PIL import Image
+from inference import DiseasePredictor
 
 st.set_page_config(page_title="Remote Radiologist", layout="wide", initial_sidebar_state="expanded")
 
@@ -9,10 +10,11 @@ description = st.beta_container()
 
 user_inputs = st.beta_container()
 
+model_path = '/path/to/model'
+predictor = DiseasePredictor(model_path=model_path, cuda=False)
 
 with header:
     header.title("Remote Radiologist")
-
 
 with user_inputs:
     user_display, output_display = user_inputs.beta_columns(2)
@@ -23,11 +25,13 @@ with user_inputs:
     uploaded_file = output_display.file_uploader("Upload Image", type=['png', 'jpg', 'jpeg'])
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
+        # image = np.zeros((224,224), dtype=np.float32)
         output_display.image(image, caption='Uploaded Image.', use_column_width=True)
         # labels = {'Covid%': 35, 'XYZ': 35, 'ABC': 30}
-        labels = {}
+        labels = predictor.predict(image)
+        print(labels)
+        # labels = {}
         # call the predictor here
         for key, value in labels.items():
             output_display.write(key + " : " + str(value))
-
 
