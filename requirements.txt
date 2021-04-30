@@ -4,3 +4,4 @@ torchxrayvision
 torch
 torchvision
 numpy
+plotly
