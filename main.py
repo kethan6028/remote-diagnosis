@@ -1,5 +1,7 @@
 import streamlit as st
 from PIL import Image
+import plotly.express as px
+import pandas as pd
 from inference import DiseasePredictor
 
 st.set_page_config(page_title="Remote Radiologist", layout="wide", initial_sidebar_state="expanded")
@@ -7,11 +9,10 @@ st.set_page_config(page_title="Remote Radiologist", layout="wide", initial_sideb
 header = st.beta_container()
 
 description = st.beta_container()
-
 user_inputs = st.beta_container()
 
-model_path = '/path/to/model'
-predictor = DiseasePredictor(model_path=model_path, cuda=False)
+# model_path = '/path/to/model'
+# predictor = DiseasePredictor(model_path=None, cuda=False)
 
 with header:
     header.title("Remote Radiologist")
@@ -27,11 +28,11 @@ with user_inputs:
         image = Image.open(uploaded_file)
         # image = np.zeros((224,224), dtype=np.float32)
         output_display.image(image, caption='Uploaded Image.', use_column_width=True)
-        # labels = {'Covid%': 35, 'XYZ': 35, 'ABC': 30}
-        labels = predictor.predict(image)
-        print(labels)
-        # labels = {}
-        # call the predictor here
-        for key, value in labels.items():
-            output_display.write(key + " : " + str(value))
+
+        labels = {"No Finding": 3, "Pneumonia": 53, "COVID-19": 32, "TB": 12}
+        label_df = pd.DataFrame({'disease': list(labels.keys()), 'percentage': list(labels.values())})
+
+        bar = px.bar(label_df, x='disease', y='percentage')
+        user_display.plotly_chart(bar)
+
 
