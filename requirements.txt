@@ -1,2 +1,6 @@
 streamlit
 pillow
+torchxrayvision
+torch
+torchvision
+numpy
